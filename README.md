@@ -3,7 +3,7 @@ Introduction
 ------------
 <font color=orange>Gluon-Box</font> is an open source object-detection tookit, which is implemented in [MxNet](https://mxnet.apache.org/) 1.6. The project is supported by CortexLabs.
 
-Supported backbones: 
+Supported [backbones](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/backbones): 
 - [ ] VGG
 - [x] ResNetV1 
 - [ ] ResNetV2 
@@ -11,7 +11,7 @@ Supported backbones:
 - [ ] RegNet
 - [ ] HRNet 
 
-Supported necks:
+Supported [necks](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/necks):
 - [x] FPN
 
 Supported Datasets:
