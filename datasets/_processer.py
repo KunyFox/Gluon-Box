@@ -6,8 +6,6 @@ def get_processer(processer):
     assert isinstance(cfg, dict), 
         "processer must be a dict, but got {}".format(type(cfg))
 
-    assert processer[-1] == 'ToBatch', "Processer should end of 'ToBatch'."
-
     processer_f = []
 
     for p in processer:
@@ -16,4 +14,6 @@ def get_processer(processer):
             raise ValueError("{} is not registed in processer!".format(f))
         processer_f.append(f(**processer[p]))
     
+    assert isinstance(processer[-1], PROCESSER.get('ToBatch')), "Processer should end of 'ToBatch'."
+
     return processer_f
