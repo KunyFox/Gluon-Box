@@ -2,7 +2,7 @@ import os
 import mxnet as mx 
 import mxnet.gluon.data.Dataset as Dataset 
 
-
+from ._processer import get_processer
 
 class BaseDataset(Dataset):
     def __init__(self,
@@ -18,6 +18,7 @@ class BaseDataset(Dataset):
         self.test_mode = test_mode 
         self.filter_empty = filter_empty
         self.min_size = min_size
+        self._processer = get_processer(processer)
         self._path_check()
 
 
@@ -36,6 +37,11 @@ class BaseDataset(Dataset):
                 idx = self._rand_another(idx)
                 continue
             return data
+
+    def processer(self, img_info):
+        for f in self._processer:
+            img_info = f(img_info)
+        return img_info
 
     def _filter(self):
         raise NotImplementedError 
