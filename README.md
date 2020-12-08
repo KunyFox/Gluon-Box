@@ -13,3 +13,13 @@ Supported backbones:
 
 Supported necks:
 - [x] FPN
+
+Supported Datasets:
+- [x] [COCO](https://cocodataset.org/#home)
+
+Supported [processers](https://github.com/KyuanCortex/Gluon-Box/blob/main/datasets/processer.py):
+- [x] ImageReader 
+- [x] ImageNormlation
+- [x] ImageResize 
+- [x] ImageFlip
+- [x] ToBatch
