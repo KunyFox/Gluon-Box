@@ -84,7 +84,7 @@ class ImageReader(object):
 
 
 @PROCESSER.register()
-class ImageNormlation(object):
+class ImageNormalizer(object):
     """Normalize image with mean and std.
 
     Image shape should be (H x W x 3) or (B x 3 x H x W).
@@ -126,7 +126,7 @@ class ImageNormlation(object):
 
 
 @PROCESSER.register()
-class ImageResize(object):
+class ImageResizer(object):
     """Resize image and booxes.
 
     The image should be a NDArray shape of (H x W x 3).
@@ -207,7 +207,7 @@ class ImageResize(object):
 
 
 @PROCESSER.register()
-class ImageFlip(object):
+class ImageFliper(object):
     """Flip the image and bboxes.
 
     If direction is 'h', the image will be flip along vertical axis.

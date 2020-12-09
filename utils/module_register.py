@@ -1,4 +1,5 @@
-import inspect, warnings
+import inspect
+import warnings
 
 
 class ModuleRegister():
