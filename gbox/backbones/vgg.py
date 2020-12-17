@@ -10,7 +10,7 @@ vgg_spec = {11: ([1, 1, 2, 2, 2], [64, 128, 256, 512, 512]),
 
 
 
-class VGG(HybridBlock):
+class SSD_VGG(HybridBlock):
     r"""VGG model from the `"Very Deep Convolutional Networks for Large-Scale Image Recognition"
     <https://arxiv.org/abs/1409.1556>`_ paper.
 
