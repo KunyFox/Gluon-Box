@@ -3,6 +3,12 @@ import mxnet.gluon.nn as nn
 
 from mxnet.gluon.nn import HybridBlock, HybridSequential
 
+from ._necks import NECKS1  
+
+#TODO recode interpolate
+
+
+@NECKS.register()
 class FPN(HybridBlock):
     r"""Feature Pyramid Network.
     This is an implementation of paper `Feature Pyramid Networks for Object
@@ -80,3 +86,109 @@ class FPN(HybridBlock):
         self.start_level = start_level
         self.end_level = end_level
         self.add_extra_convs = add_extra_convs
+
+        if isinstance(add_extra_convs, str):
+            # Extra_convs_source choices: 'on_input', 'on_lateral', 'on_output'
+            assert add_extra_convs in ('on_input', 'on_lateral', 'on_output')
+        elif add_extra_convs:  # True
+            if extra_convs_on_inputs:
+                # TODO: deprecate `extra_convs_on_inputs`
+                warnings.simplefilter('once')
+                warnings.warn(
+                    '"extra_convs_on_inputs" will be deprecated in v2.9.0,'
+                    'Please use "add_extra_convs"', DeprecationWarning)
+                self.add_extra_convs = 'on_input'
+            else:
+                self.add_extra_convs = 'on_output'
+
+        self.lateral_convs = HybridSequential()
+        self.fpn_convs = HybridSequential()
+
+        for i in range(self.start_level, self.backbone_end_level):
+            self.lateral_convs.add(
+                HybridSequential(
+                    nn.Conv2D(in_channels=in_channels[i],
+                              channels=out_channels,
+                              kernel_size=1,
+                              padding=0),
+                    nn.BatchNorm(),
+                    nn.Activation('relu')
+                )
+            )
+
+            self.fpn_convs.add(
+                HybridSequential(
+                    nn.Conv2D(in_channels=out_channels,
+                              channels=out_channels,
+                              kernel_size=3,
+                              padding=1),
+                    nn.BatchNorm(),
+                    nn.Activation('relu')
+                )
+            )
+
+        # add extra conv layers (e.g., RetinaNet)
+        extra_levels = num_outs - self.backbone_end_level + self.start_level
+        if self.add_extra_convs and extra_levels >= 1:
+            for i in range(extra_levels):
+                if i == 0 and self.add_extra_convs == 'on_input':
+                    in_channels = self.in_channels[self.backbone_end_level - 1]
+                else:
+                    in_channels = out_channels
+                self.fpn_convs.add(
+                    HybridSequential(
+                        nn.Conv2D(
+                            in_channels=in_channels,
+                            channels=out_channels,
+                            strides=2,
+                            kernel_size=3,
+                            padding=1
+                        ),
+                        nn.BatchNorm(),
+                        nn.Activation('relu')
+                    )
+                )
+
+        def hybrid_forward(self, F, inputs):
+            assert len(inputs) == len(self.in_channels)
+
+            # build laterals
+            laterals = [
+                lateral_conv(inputs[i + self.start_level])
+                for i, lateral_conv in enumerate(self.lateral_convs)
+            ]
+
+            used_backbone_levels = len(laterals)
+            for i in range(used_backbone_levels - 1, 0, -1):
+                prev_shape = laterals[i - 1].shape[2:]
+                laterals[i - 1] += F.contrib.BilinearResize2D(laterals[i], like=laterals[i - 1])
+
+            # build outputs
+            # part 1: from original levels
+            outs = [
+                self.fpn_convs[i](laterals[i]) for i in range(used_backbone_levels)
+            ]
+
+            if self.num_outs > len(outs):
+                # use max pool to get more levels on top of outputs
+                # (e.g., Faster R-CNN, Mask R-CNN)
+                if not self.add_extra_convs:
+                    for i in range(self.num_outs - used_backbone_levels):
+                        outs.append(F.contrib.BilinearResize2D(out[-1], scale_heigh=0.5, scale_width=0.5))
+                else:
+                    if self.add_extra_convs == 'on_input':
+                        extra_source = inputs[self.backbone_end_level - 1]
+                    elif self.add_extra_convs == 'on_lateral':
+                        extra_source = laterals[-1]
+                    elif self.add_extra_convs == 'on_output':
+                        extra_source = outs[-1]
+                    else:
+                        raise NotImplementedError
+                    outs.append(self.fpn_convs[used_backbone_levels](extra_source))
+                    for i in range(used_backbone_levels + 1, self.num_outs):
+                        if self.relu_before_extra_convs:
+                            outs.append(self.fpn_convs[i](F.relu(outs[-1])))
+                        else:
+                            outs.append(self.fpn_convs[i](outs[-1]))
+            
+            return tuple(outs)

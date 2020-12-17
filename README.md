@@ -7,21 +7,24 @@ Introduction
 <img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000010363.jpg" width="175" height="125"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000005992.jpg" width="175" height="125"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000118209.jpg" width="175" height="125"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000221693.jpg" width="175" height="125"/>
 </div>
 
-Supported [backbones](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/backbones): 
+Supported [_backbones_](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/backbones): 
 - [ ] VGG
 - [x] ResNetV1 
-- [ ] ResNetV2 
+- [x] ResNetV2 
 - [ ] ResNeXt 
 - [ ] RegNet
 - [ ] HRNet 
 
-Supported [necks](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/necks):
-- [ ] FPN
+Supported [_necks_](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/necks):
+- [x] FPN
 
-Supported Datasets:
+Supported _Datasets_:
 - [x] [COCO](https://cocodataset.org/#home)
+- [ ] [PASCAL VOC](http://host.robots.ox.ac.uk/pascal/VOC/)
+- [ ] [LVIS](https://www.lvisdataset.org/)
+- [ ] [Open Image](https://storage.googleapis.com/openimages/web/index.html)
 
-Supported [processers](https://github.com/KyuanCortex/Gluon-Box/blob/main/datasets/processer.py):
+Supported [_processers_](https://github.com/KyuanCortex/Gluon-Box/blob/main/datasets/processer.py):
 - [x] ImageReader 
 - [x] ImageNormalizer
 - [x] ImageResizer 

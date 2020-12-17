@@ -128,7 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-modelzoo/
+model_zoo/
 .history/
 utils/visualization.py
 .vscode/
+backbone_models/

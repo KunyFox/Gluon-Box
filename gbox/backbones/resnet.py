@@ -141,7 +141,7 @@ class BasicBlockV2(HybridBlock):
         x = self.conv1(x)
 
         x = self.bn2(x)
-        x = act(x, act_type='relu')
+        x = F.Activation(x, act_type='relu')
         x = self.conv2(x)
 
         return x + residual
@@ -234,7 +234,7 @@ class ResNetV1(HybridBlock):
         Enable thumbnail.
     """
     
-    def __init__(self, num_layers, classes=1000, thumbnail=False, **kwargs):
+    def __init__(self, num_layers, thumbnail=False, **kwargs):
         super(ResNetV1, self).__init__(**kwargs)
         assert num_layers in [18, 34, 50, 101, 152], \
             'The number of layers must in (18, 34, 50, 101, 152), but got {}.'.format(num_layers)
@@ -252,9 +252,9 @@ class ResNetV1(HybridBlock):
                 stride = 1 if i == 0 else 2
                 self.features.add(self._make_layer(block, num_layer, channels[i+1],
                                                    stride, i+1, in_channels=channels[i]))
-            self.features.add(nn.GlobalAvgPool2D())
+            # self.features.add(nn.GlobalAvgPool2D())
 
-            self.output = nn.Dense(classes, in_units=channels[-1])
+            # self.output = nn.Dense(classes, in_units=channels[-1])
 
     def _make_layer(self, block, layers, channels, stride, stage_index, in_channels=0):
         layer = nn.HybridSequential(prefix='stage%d_'%stage_index)
@@ -278,6 +278,7 @@ class ResNetV1(HybridBlock):
         return self._name 
 
 
+@BACKBONBES.register()
 class ResNetV2(HybridBlock):
     r"""ResNet V2 model from
     `"Identity Mappings in Deep Residual Networks"
@@ -297,12 +298,12 @@ class ResNetV2(HybridBlock):
         Enable thumbnail.
     """
     
-    def __init__(self, num_layers, classes=1000, thumbnail=False, **kwargs):
+    def __init__(self, num_layers, thumbnail=False, **kwargs):
         super(ResNetV2, self).__init__(**kwargs)
         assert num_layers in [18, 34, 50, 101, 152], \
             'The number of layers must in (18, 34, 50, 101, 152), but got {}.'.format(num_layers)
         self._name = "ResNetV2-{}".format(num_layers)
-        block, layers, channels = resnetv1_spec[num_layers]
+        block, layers, channels = resnetv2_spec[num_layers]
         with self.name_scope():
             self.features = nn.HybridSequential(prefix='')
             self.features.add(nn.BatchNorm(scale=False, center=False))
@@ -323,7 +324,7 @@ class ResNetV2(HybridBlock):
             self.features.add(nn.GlobalAvgPool2D())
             self.features.add(nn.Flatten())
 
-            self.output = nn.Dense(classes, in_units=in_channels)
+            # self.output = nn.Dense(classes, in_units=in_channels)
 
     def _make_layer(self, block, layers, channels, stride, stage_index, in_channels=0):
         layer = nn.HybridSequential(prefix='stage%d_'%stage_index)
@@ -346,7 +347,5 @@ class ResNetV2(HybridBlock):
     def name(self):
         return self._name 
 
-net = ResNetV2(50)
-net.load_parameters('/home/ykun/DiskWD/Gluon-Detection/gludet/backbones/modelzoo/resnet50_v2-ecdde353.params')
-y = net(mx.nd.zeros((1,3,224,224)))
-import pdb;pdb.set_trace()
+
+print(BACKBONBES)

@@ -16,8 +16,7 @@ class ModuleRegister():
         return list(self._modules.keys())
 
     def get(self, key):
-        assert key in self.modules(), \
-            raise KeyError("Module {} is not registed".format(key))
+        assert key in self.modules, "Module {} is not registed".format(key)
         return self._modules.get(key)
 
     def _register_with_module(self, module, name=None, regis_force=False):
@@ -27,7 +26,7 @@ class ModuleRegister():
         if name is None:
             name = module.__name__
 
-        if name in self.modules():
+        if name in self.modules:
             if not regis_force:
                 raise KeyError("{} is already registed, if you want to override it, please set regis_force to True".format(name))
             else:
