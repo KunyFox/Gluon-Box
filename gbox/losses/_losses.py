@@ -3,7 +3,7 @@ sys.path.append('.')
 
 from utils import ModuleRegister
 
-NECKS = ModuleRegister('necks')
+LOSSES = ModuleRegister('losses')
 
 def get_neck(cfg):
     assert isinstance(cfg, dict), 
@@ -13,8 +13,8 @@ def get_neck(cfg):
         "cfg should have contribute to 'type'"
     
     _cfg = cfg.copy()
-    neck_type = _cfg.pop('type')
-    assert isinstance(nexk_type, str),
-        "neck_type must be str, but got {}".format(type(neck_type))
-    neck = NECKS.get(neck_type)
-    return neck(**_cfg)
+    loss_type = _cfg.pop('type')
+    assert isinstance(loss_type, str),
+        "loss_type must be str, but got {}".format(type(loss_type))
+    loss = LOSSES.get(loss_type)
+    return loss(**_cfg)

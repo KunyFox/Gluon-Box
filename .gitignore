@@ -133,4 +133,4 @@ model_zoo/
 utils/visualization.py
 .vscode/
 backbone_models/
-prepare_para.py
+test.py 

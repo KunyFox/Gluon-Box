@@ -1,13 +1,13 @@
 # <font color=orange> Gluon-Box </font>
 Introduction
 ------------
-<font color=orange>Gluon-Box</font> is an open source object-detection tookit, which is implemented in [MxNet](https://mxnet.apache.org/) 1.6. The project is supported by CortexLabs.
+<font color=orange>Gluon-Box</font> is an open source object-detection tookit, which is implemented in [MxNet](https://mxnet.apache.org/). The project is supported by CortexLabs.
 <div  align="center"> 
-<img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000080671.jpg" width="350" height="250"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000002157.jpg" width="350" height="250"/> 
-<img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000010363.jpg" width="175" height="125"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000005992.jpg" width="175" height="125"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000118209.jpg" width="175" height="125"/><img src="https://github.com/KyuanCortex/Gluon-Box/blob/main/imgs/000000221693.jpg" width="175" height="125"/>
+<img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000080671.jpg" width="350" height="250"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000002157.jpg" width="350" height="250"/> 
+<img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000010363.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000005992.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000118209.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000221693.jpg" width="175" height="125"/>
 </div>
 
-Supported [_backbones_](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/backbones): 
+Supported [_backbones_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/backbones): 
 - [ ] VGG
 - [x] ResNetV1 
 - [x] ResNetV2 
@@ -15,7 +15,7 @@ Supported [_backbones_](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/
 - [ ] RegNet
 - [ ] HRNet 
 
-Supported [_necks_](https://github.com/KyuanCortex/Gluon-Box/tree/main/gbox/necks):
+Supported [_necks_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/necks):
 - [x] FPN
 
 Supported _Datasets_:
@@ -24,9 +24,17 @@ Supported _Datasets_:
 - [ ] [LVIS](https://www.lvisdataset.org/)
 - [ ] [Open Image](https://storage.googleapis.com/openimages/web/index.html)
 
-Supported [_processers_](https://github.com/KyuanCortex/Gluon-Box/blob/main/datasets/processer.py):
+Supported [_processers_](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py):
 - [x] ImageReader 
 - [x] ImageNormalizer
 - [x] ImageResizer 
 - [x] ImageFliper
 - [x] ToBatch
+
+Supported [_losses_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses):
+- [x] CrossEntropyLoss (CE)
+- [x] BinaryCrossEntropyLoss (BCE)
+- [x] L1
+- [x] L2 (MSE)
+- [x] SmoothL1 
+- [x] FocalLoss
