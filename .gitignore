@@ -131,6 +131,6 @@ dmypy.json
 model_zoo/
 .history/
 utils/visualization.py
-.vscode/
+.vscode/*
 backbone_models/
-test.py 
+./test.py 
