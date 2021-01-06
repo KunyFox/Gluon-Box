@@ -11,6 +11,7 @@ BACKBONBES = ModuleRegister('backbones')
 DATASETS = ModuleRegister('datasets')
 PROCESSERS = ModuleRegister('processers')
 
+
 def build_from_cfg(cls, cfg):
     assert isinstance(cls, ModuleRegister)
     assert isinstance(cfg, dict), 
@@ -20,7 +21,7 @@ def build_from_cfg(cls, cfg):
     _cfg = cfg.copy()
     _type = _cfg.pop('type')
     assert isinstance(_type, str),
-        "'type' must be str, but got {}".format(type(neck_type))
+        "'type' must be a str, but got {}".format(type(neck_type))
 
     instance = cls.get(_type, None)
     assert instance is not None 
@@ -43,9 +44,6 @@ def get_loss(cfg):
 def get_dataset(cfg):
     return build_from_cfg(DATASETS, cfg)
 
-def get_processers(cfg):
-
-
 def get_processers(processers):
     assert isinstance(processers, list), 
         "processer must be a list, but got {}".format(type(processers))
@@ -53,6 +51,6 @@ def get_processers(processers):
     target_pros = [build_from_cfg(PROCESSERS, cfg) for cfg in processers]
     
     assert isinstance(target_pros[-1], PROCESSER.get('ToBatch')),  \
-        "Processers should end of 'ToBatch'."
+        "The end of processers should be 'ToBatch'."
 
     return target_pros
