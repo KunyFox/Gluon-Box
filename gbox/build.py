@@ -19,8 +19,8 @@ def build_from_cfg(cls, cfg):
         "cfg should have contribute to 'type'"
     _cfg = cfg.copy()
     _type = _cfg.pop('type')
-    assert isinstance(nexk_type, str),
-        "neck_type must be str, but got {}".format(type(neck_type))
+    assert isinstance(_type, str),
+        "'type' must be str, but got {}".format(type(neck_type))
 
     instance = cls.get(_type, None)
     assert instance is not None 
