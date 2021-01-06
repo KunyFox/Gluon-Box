@@ -1,7 +1,7 @@
 # --------------------------------------------------------------------------------------
-# Copyright 2020 by Kun Yuan, CortexLabs AI Group.
+# Copyright 2021 by Kun Yuan, CortexLabs AI Group.
 # All rights reserved.
-# This file is part of the GLuon-Box (https://github.com/KyuanCortex/Gluon-Box),
+# This file is part of the GLuon-Box (https://github.com/KunyFox/Gluon-Box),
 # and is released under the "GNU General Public License v2.0". Please see the LICENSE.
 # File that should have been included as part of this package.
 #
@@ -17,11 +17,11 @@ from random import sample
 from gluoncv.data import imdecode
 from gluoncv.data.transforms import image
 
-from ._processer import PROCESSER
+from gbox import PROCESSERS
 
 
 
-@PROCESSER.register()
+@PROCESSERS.register()
 class ImageReader(object):
     """Read image from file.
 
@@ -83,7 +83,7 @@ class ImageReader(object):
         return repr_str
 
 
-@PROCESSER.register()
+@PROCESSERS.register()
 class ImageNormalizer(object):
     """Normalize image with mean and std.
 
@@ -125,7 +125,7 @@ class ImageNormalizer(object):
         return imimg_info
 
 
-@PROCESSER.register()
+@PROCESSERS.register()
 class ImageResizer(object):
     """Resize image and booxes.
 
@@ -206,7 +206,7 @@ class ImageResizer(object):
         return (scale_h, scale2)
 
 
-@PROCESSER.register()
+@PROCESSERS.register()
 class ImageFliper(object):
     """Flip the image and bboxes.
 
@@ -294,7 +294,7 @@ class ImageFliper(object):
         return flip 
 
 
-@PROCESSER.register()
+@PROCESSERS.register()
 class ToBatch(object):
     """The final step of processor of image.
 

@@ -8,7 +8,10 @@ from gbox.core import Conv2dModule
 from base import BaseHead 
 from mxnet.gluon.nn import HybridBlock, HybridSequential
 
+from gbox import HEADS
 
+
+@HEADS.register()
 class AnchorFreeHead(BaseHead):
     def __init__(self,
                  in_channels,

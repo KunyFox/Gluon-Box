@@ -3,7 +3,7 @@ import mxnet.gluon.nn as nn
 
 from mxnet.gluon.nn import HybridBlock, HybridSequential
 
-from ._necks import NECKS1  
+from gbox import NECKS1  
 
 #TODO recode interpolate
 

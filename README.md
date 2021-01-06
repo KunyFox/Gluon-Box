@@ -1,7 +1,7 @@
 # <font color=orange> Gluon-Box </font>
-Introduction
-------------
-<font color=orange>Gluon-Box</font> is an open source object-detection tookit, which is implemented in [MxNet](https://mxnet.apache.org/). The project is supported by CortexLabs.
+## Introduction
+
+Gluon-Box is an open source object-detection tookit, which is implemented in [MxNet](https://mxnet.apache.org/). The project is supported by CortexLabs.
 <div  align="center"> 
 <img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000080671.jpg" width="350" height="250"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000002157.jpg" width="350" height="250"/> 
 <img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000010363.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000005992.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000118209.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000221693.jpg" width="175" height="125"/>

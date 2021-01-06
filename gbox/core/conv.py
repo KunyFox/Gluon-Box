@@ -4,6 +4,29 @@ from mxnet.gluon.nn import HybridBlock
 
 
 class Conv2dModule(HybridBlock):
+    """A convolution layer with normalization and activation.
+
+    Parameters
+    ----------
+    in_channel: int
+        The input-dim of conv-layer.
+    out_channel: int
+        The output-dim of conv-layer.
+    kernel_size: int (default 3)
+        Size of kernel.
+    padding: int (default 1)
+        Padding size while convoluting. 
+    strides: int (default 1)
+        The stiding size while convoluting.
+    with_bias: bool (default False)
+        Whether to employ bias follow convolution.
+    num_group: int (default 1)
+        The number of convlution group.
+    norm_cfg: dict
+        Config of normalization.
+    activation: str (default 'relu')
+        Activation type.
+    """
     def __init__(self,
                  in_channel,
                  out_channel,

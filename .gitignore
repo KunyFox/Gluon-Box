@@ -131,6 +131,7 @@ dmypy.json
 model_zoo/
 .history/
 utils/visualization.py
+utils/runner.py 
+train_detector.py
 .vscode/*
 backbone_models/
-./test.py 

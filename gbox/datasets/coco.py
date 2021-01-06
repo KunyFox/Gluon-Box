@@ -6,6 +6,7 @@ from .base import BaseDataset
 from pycocotools.coco import COCO 
 from pycocotools.cocoeval import COCOeval
 
+from gbox import DATASETS
 
 
 COCO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
@@ -24,6 +25,8 @@ COCO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
                'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush')
 
 
+
+@DATASETS.register()
 class CocoDataset(BaseDataset):
     def __init__(self,
                  ann_file, 

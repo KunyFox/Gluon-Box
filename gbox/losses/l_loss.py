@@ -1,7 +1,7 @@
 import mxnet as mx 
 
 from mxnet.gluon.nn import HybridBlock 
-from ._losses import LOSSES
+from gbox import LOSSES
 
 
 @LOSSES.register()

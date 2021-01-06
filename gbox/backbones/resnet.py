@@ -4,7 +4,7 @@ import mxnet as mx
 import mxnet.gluon.nn as nn
 from mxnet.gluon.nn import HybridBlock
 
-from ._backbone import BACKBONBES
+from gbox import BACKBONBES
 
 
 def _conv3x3(channels, stride, in_channels):
@@ -237,7 +237,8 @@ class ResNetV1(HybridBlock):
     def __init__(self, num_layers, thumbnail=False, **kwargs):
         super(ResNetV1, self).__init__(**kwargs)
         assert num_layers in [18, 34, 50, 101, 152], \
-            'The number of layers must in (18, 34, 50, 101, 152), but got {}.'.format(num_layers)
+            'The number of layers must in (18, 34, 50, 101, 152), but got {}.'.format( \
+                num_layers)
         self._name = "ResNetV1-{}".format(num_layers)
         block, layers, channels = resnetv1_spec[num_layers]
         with self.name_scope():
@@ -346,6 +347,3 @@ class ResNetV2(HybridBlock):
     @property
     def name(self):
         return self._name 
-
-
-print(BACKBONBES)

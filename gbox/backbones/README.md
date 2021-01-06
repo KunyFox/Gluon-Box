@@ -2,7 +2,7 @@
 
 Here, we implement some backbones which are pre-trained on ImageNet. The logit layer is removed from the top of architecture.
 
-## ResNet
+## ResNet  [\<arxiv>](https://arxiv.org/pdf/1512.03385.pdf)
 We adopt the ResNet in MXNet [model-zoo](https://mxnet.cdn.apache.org/versions/1.7.0/api/python/docs/api/gluon/model_zoo/index.html), including ResNet-v1 and ResNet-v2. The outputs are feature maps of four stages, and the pre-trained model could be downloaded from:
 - [ResNetv1-18](https://drive.google.com/file/d/1pQgVB5UzpuTqMlAUNWIt4nmJ98M8qrC4/view?usp=sharing)
 - [ResNetv1-34](https://drive.google.com/file/d/1pQgVB5UzpuTqMlAUNWIt4nmJ98M8qrC4/view?usp=sharing)

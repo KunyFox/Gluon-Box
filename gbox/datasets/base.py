@@ -2,8 +2,10 @@ import os
 import mxnet as mx 
 import mxnet.gluon.data.Dataset as Dataset 
 
-from ._processer import get_processer
+from gbox import DATASETS
 
+
+@DATASETS.register()
 class BaseDataset(Dataset):
     def __init__(self,
                  ann_file, 
