@@ -18,12 +18,15 @@ def build_from_cfg(cls, cfg):
         "config must be a dict, but got {}".format(type(cfg))
     assert 'type' in cfg, 
         "cfg should have contribute to 'type'"
+
     _cfg = cfg.copy()
     _type = _cfg.pop('type')
+
     assert isinstance(_type, str),
-        "'type' must be a str, but got {}".format(type(neck_type))
+        "'type' must be a str, but got {}".format(type(_type))
 
     instance = cls.get(_type, None)
+    
     assert instance is not None 
 
     return instance(**_cfg)
