@@ -10,11 +10,11 @@ Gluon-Box is an open source object-detection tookit, which is implemented in [Mx
 ## These components have already been supported.
 | Supported Components |   |
 | :----------- | :-----------|
-| [_backbones_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/backbones)| ResNetV1, ResNetV2 |
-| [_necks_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/necks) | FPN |
+| [_Backbones_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/backbones)| ResNetV1, ResNetV2 |
+| [_Necks_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/necks) | FPN |
 | [_Datasets_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/datasets) | COCO |
-| [_processers_](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py) | ImageReader, ImageNormalizer, ImageResizer, ImageFliper, BboxTransformer, ToBatch |
-| [_losses_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses) | CrossEntropyLoss(CE), BinaryCrossEntropyLoss(BCE), L1, L2, SmoothL1, FocalLoss |
+| [_Processers_](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py) | ImageReader, ImageNormalizer, ImageResizer, ImageFliper, BboxTransformer, ToBatch |
+| [_Losses_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses) | CrossEntropyLoss(CE), BinaryCrossEntropyLoss(BCE), L1, L2, SmoothL1, FocalLoss |
 
 <br/>  
 

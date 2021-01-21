@@ -48,6 +48,11 @@ class AnchorFreeHead(BaseHead):
 
         self.build_layers()
 
+    def init_weights(self):
+        self.cls_layers.initialize(mx.initializer.Xavier())
+        self.reg_layers.initialize(mx.initializer.Xavier())
+        self.cls_pre.initialize(mx.initializer.Xavier())
+        self.reg_pre.initialize(mx.initializer.Xavier())
 
     def build_layers(self):
         self.build_cls_layers()

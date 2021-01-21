@@ -1,8 +1,8 @@
 import mxnet as mx
 import mxnet.gluon.nn as nn
 
-from utils import func_mapping, Scale, functions
 from gbox import HEADS, get_loss
+from utils import func_mapping, Scale, functions
 from .anchor_free_head import AnchorFreeHead
 
 from mmcv.cnn import Scale, normal_init
@@ -27,35 +27,37 @@ class FCOSHead(AnchorFreeHead):
     of up to 4.9. Please see https://github.com/tianzhi0549/FCOS for
     more detail.
 
-    Args:
-        num_classes (int): Number of categories excluding the background
-            category.
-        in_channels (int): Number of channels in the input feature map.
-        strides (list[int] | list[tuple[int, int]]): Strides of points
-            in multiple feature levels. Default: (4, 8, 16, 32, 64).
-        regress_ranges (tuple[tuple[int, int]]): Regress range of multiple
-            level points.
-        center_sampling (bool): If true, use center sampling. Default: False.
-        center_sample_radius (float): Radius of center sampling. Default: 1.5.
-        norm_on_bbox (bool): If true, normalize the regression targets
-            with FPN strides. Default: False.
-        centerness_on_reg (bool): If true, position centerness on the
-            regress branch. Please refer to https://github.com/tianzhi0549/FCOS/issues/89#issuecomment-516877042.
-            Default: False.
-        conv_bias (bool | str): If specified as `auto`, it will be decided by the
-            norm_cfg. Bias of conv will be set as True if `norm_cfg` is None, otherwise
-            False. Default: "auto".
-        loss_cls (dict): Config of classification loss.
-        loss_bbox (dict): Config of localization loss.
-        loss_centerness (dict): Config of centerness loss.
-        norm_cfg (dict): dictionary to construct and config norm layer.
-            Default: norm_cfg=dict(type='GN', num_groups=32, requires_grad=True).
+    Parameters:
+    -----------
+    num_classes: int 
+        Number of categories excluding the background category.
+    in_channels: int
+        Number of channels in the input feature map.
+    strides: list of int | list of tuple[int, int] 
+        Strides of points in multiple feature levels. 
+    regress_ranges: tuple[tuple[int, int]] 
+        Regress range of multiple level points.
+    center_sampling: bool (default False)
+        If true, use center sampling.
+    center_sample_radius: float (default 1.5)
+        Radius of center sampling.
+    norm_on_bbox: bool (default False)
+        If true, normalize the regression targets with FPN strides.
+    centerness_on_reg: bool (defult False)
+        If true, position centerness on the regress branch. Please refer to \
+        https://github.com/tianzhi0549/FCOS/issues/89#issuecomment-516877042.
+    conv_bias: bool | str 
+        If specified as `auto`, it will be decided by the norm_cfg. Bias of \
+        conv will be set as True if `norm_cfg` is None, otherwise False. 
+    loss_cls: dict
+        Config of classification loss.
+    loss_bbox: dict
+        Config of localization loss.
+    loss_centerness: dict
+        Config of centerness loss.
+    norm_cfg: dict
+        Dictionary to construct and config norm layer.
 
-    Example:
-        >>> self = FCOSHead(11, 7)
-        >>> feats = [torch.rand(1, 7, s, s) for s in [4, 8, 16, 32, 64]]
-        >>> cls_score, bbox_pred, centerness = self.forward(feats)
-        >>> assert len(cls_score) == len(self.scales)
     """  # noqa: E501
 
     def __init__(self,
@@ -95,35 +97,35 @@ class FCOSHead(AnchorFreeHead):
         self.loss_centerness = build_loss(loss_centerness)
 
     def _init_layers(self):
-        # TODO
         """Initialize layers of the head."""
         super()._init_layers()
         self.conv_centerness = nn.Conv2d(self.feat_channels, 1, 3, padding=1)
         self.scales = nn.ModuleList([Scale(1.0) for _ in self.strides])
 
     def init_weights(self):
-        # TODO
         """Initialize weights of the head."""
         super().init_weights()
-        normal_init(self.conv_centerness, std=0.01)
+        self.conv_centerness.initialize(mx.initializer.Xavier())
 
     def hybrid_forward(self, F, feats):
         """Forward features from the upstream network.
 
-        Args:
-            feats (tuple[Tensor]): Features from the upstream network, each is
-                a 4D-tensor.
+        Parameters:
+        -----------
+        feats: tuple[NDArray] 
+            Features from the upstream network, each is a 4D-NDArray.
 
         Returns:
-            tuple:
-                cls_scores (list[Tensor]): Box scores for each scale level, \
-                    each is a 4D-tensor, the channel number is \
-                    num_points * num_classes.
-                bbox_preds (list[Tensor]): Box energies / deltas for each \
-                    scale level, each is a 4D-tensor, the channel number is \
-                    num_points * 4.
-                centernesses (list[Tensor]): Centerss for each scale level, \
-                    each is a 4D-tensor, the channel number is num_points * 1.
+        --------
+        cls_scores: list of NDArray
+            Box scores for each scale level, each is a 4D-NDArray, the channel \
+            number is num_points * num_classes.
+        bbox_preds: list of NDArray
+            Box energies / deltas for each scale level, each is a 4D-tensor,   \
+            the channel number is num_points * 4.
+        centernesses: list of NDArray 
+            Centerss for each scale level, each is a 4D-NDArray, the channel   \
+            number is num_points * 1.
         """
         return func_mapping(self.hybrid_forward_base, 
                             feats, 
@@ -225,47 +227,49 @@ class FCOSHead(AnchorFreeHead):
             loss_bbox=loss_bbox,
             loss_centerness=loss_centerness)
 
-    @force_fp32(apply_to=('cls_scores', 'bbox_preds', 'centernesses'))
     def get_bboxes(self,
                    cls_scores,
                    bbox_preds,
                    centernesses,
-                   img_metas,
+                   img_infos,
                    cfg=None,
                    rescale=False,
                    with_nms=True):
         """Transform network output for a batch into bbox predictions.
 
-        Args:
-            cls_scores (list[Tensor]): Box scores for each scale level
-                with shape (N, num_points * num_classes, H, W).
-            bbox_preds (list[Tensor]): Box energies / deltas for each scale
-                level with shape (N, num_points * 4, H, W).
-            centernesses (list[Tensor]): Centerness for each scale level with
-                shape (N, num_points * 1, H, W).
-            img_metas (list[dict]): Meta information of each image, e.g.,
-                image size, scaling factor, etc.
-            cfg (mmcv.Config | None): Test / postprocessing configuration,
-                if None, test_cfg would be used. Default: None.
-            rescale (bool): If True, return boxes in original image space.
-                Default: False.
-            with_nms (bool): If True, do nms before return boxes.
-                Default: True.
+        Parameters:
+        -----------
+        cls_scores: list of NDArray
+            Box scores for each scale level with shape (N, num_points * num_classes, H, W).
+        bbox_preds: list of NDArray
+            Box energies / deltas for each scale level with shape (N, num_points * 4, H, W).
+        centernesses: list of NDArray
+            Centerness for each scale level with shape (N, num_points * 1, H, W).
+        img_infos: list of dict 
+            Meta information of each image, e.g.,image size, scaling factor, etc.
+        cfg: dict (default None)
+            Test / postprocessing configuration,
+            if None, test_cfg would be used. Default: None.
+        rescale: bool (default False)
+            If True, return boxes in original image space.
+        with_nms: bool (default True) 
+            If True, do nms before return boxes.
 
         Returns:
-            list[tuple[Tensor, Tensor]]: Each item in result_list is 2-tuple.
-                The first item is an (n, 5) tensor, where the first 4 columns
-                are bounding box positions (tl_x, tl_y, br_x, br_y) and the
-                5-th column is a score between 0 and 1. The second item is a
-                (n,) tensor where each item is the predicted class label of the
-                corresponding box.
+        --------
+        list of tuple[Tensor, Tensor]: Each item in result_list is 2-tuple.
+            The first item is an (n, 5) tensor, where the first 4 columns
+            are bounding box positions (tl_x, tl_y, br_x, br_y) and the
+            5-th column is a score between 0 and 1. The second item is a
+            (n,) tensor where each item is the predicted class label of the
+            corresponding box.
         """
         assert len(cls_scores) == len(bbox_preds)
         num_levels = len(cls_scores)
 
         featmap_sizes = [featmap.size()[-2:] for featmap in cls_scores]
         mlvl_points = self.get_points(featmap_sizes, bbox_preds[0].dtype,
-                                      bbox_preds[0].device)
+                                      bbox_preds[0].context)
         result_list = []
         for img_id in range(len(img_metas)):
             cls_score_list = [
@@ -433,20 +437,21 @@ class FCOSHead(AnchorFreeHead):
             num_points_per_lvl=num_points)
 
         # split to per img, per level
-        labels_list = [labels.split(num_points, 0) for labels in labels_list]
+        split_inds = tuple([sum(num_points[:i]) for i in range(len(num_points))][1:])
+        labels_list = [labels.split_v2(indices_or_sections=split_inds, axis=0) 
+            for labels in labels_list]
         bbox_targets_list = [
-            bbox_targets.split(num_points, 0)
-            for bbox_targets in bbox_targets_list
-        ]
+            bbox_targets.split_v2(indices_or_sections=split_inds, axis=0)
+            for bbox_targets in bbox_targets_list]
 
         # concat per level image
         concat_lvl_labels = []
         concat_lvl_bbox_targets = []
         for i in range(num_levels):
             concat_lvl_labels.append(
-                torch.cat([labels[i] for labels in labels_list]))
-            bbox_targets = torch.cat(
-                [bbox_targets[i] for bbox_targets in bbox_targets_list])
+                mx.nd.concat([labels[i] for labels in labels_list], dim=0))
+            bbox_targets = mx.nd.concat(
+                [bbox_targets[i] for bbox_targets in bbox_targets_list], dim=0)
             if self.norm_on_bbox:
                 bbox_targets = bbox_targets / self.strides[i]
             concat_lvl_bbox_targets.append(bbox_targets)
@@ -540,12 +545,14 @@ class FCOSHead(AnchorFreeHead):
     def centerness_target(self, pos_bbox_targets):
         """Compute centerness targets.
 
-        Args:
-            pos_bbox_targets (Tensor): BBox targets of positive bboxes in shape
-                (num_pos, 4)
+        Parameters:
+        -----------
+        pos_bbox_targets: NDArray
+            BBox targets of positive bboxes in shape (num_pos, 4).
 
         Returns:
-            Tensor: Centerness target.
+        --------
+        Centerness target: NDArray
         """
         # only calculate pos centerness targets, otherwise there may be nan
         left_right = pos_bbox_targets[:, [0, 2]]
