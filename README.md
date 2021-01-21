@@ -7,34 +7,19 @@ Gluon-Box is an open source object-detection tookit, which is implemented in [Mx
 <img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000010363.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000005992.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000118209.jpg" width="175" height="125"/><img src="https://github.com/KunyFox/Gluon-Box/blob/main/imgs/000000221693.jpg" width="175" height="125"/>
 </div>
 
-Supported [_backbones_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/backbones): 
-- [ ] VGG
-- [x] ResNetV1 
-- [x] ResNetV2 
-- [ ] ResNeXt 
-- [ ] RegNet
-- [ ] HRNet 
+## These components have already been supported.
+| Supported Components |   |
+| :----------- | :-----------|
+| [_backbones_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/backbones)| ResNetV1, ResNetV2 |
+| [_necks_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/necks) | FPN |
+| [_Datasets_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/datasets) | COCO |
+| [_processers_](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py) | ImageReader, ImageNormalizer, ImageResizer, ImageFliper, BboxTransformer, ToBatch |
+| [_losses_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses) | CrossEntropyLoss(CE), BinaryCrossEntropyLoss(BCE), L1, L2, SmoothL1, FocalLoss |
 
-Supported [_necks_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/necks):
-- [x] FPN
+<br/>  
 
-Supported _Datasets_:
-- [x] [COCO](https://cocodataset.org/#home)
-- [ ] [PASCAL VOC](http://host.robots.ox.ac.uk/pascal/VOC/)
-- [ ] [LVIS](https://www.lvisdataset.org/)
-- [ ] [Open Image](https://storage.googleapis.com/openimages/web/index.html)
-
-Supported [_processers_](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py):
-- [x] ImageReader 
-- [x] ImageNormalizer
-- [x] ImageResizer 
-- [x] ImageFliper
-- [x] ToBatch
-
-Supported [_losses_](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses):
-- [x] CrossEntropyLoss (CE)
-- [x] BinaryCrossEntropyLoss (BCE)
-- [x] L1
-- [x] L2 (MSE)
-- [x] SmoothL1 
-- [x] FocalLoss
+### And we are working hard to support more methods.
+| Coming Soon |   |
+| :-------- | :--------- | 
+| backbones | VGG, ResNext, RegNet, HRNet |
+| datasets | PASCAL VOC, LVIS, Open Image |

@@ -119,7 +119,7 @@ class AnchorFreeHead(BaseHead):
         return cls_preds, reg_preds
 
 
-    def loss(self, cls_preds, reg_preds, labels, bboxes, **kwargs):
+    def loss(self, cls_preds, reg_preds, img_infos, **kwargs):
         """Compute loss of 'bbox' and 'classification'.
 
         Parameters:
@@ -128,10 +128,7 @@ class AnchorFreeHead(BaseHead):
             Prdiction of classification.
         reg_preds: list of NDArray
             Prediction of regression.
-        labels: list of NDArray
-            The labels of bboxes.
-        bboxes: list of NDArray
-            The coordinates of booxes.
+        img_infos: list of dict
         """
         raise NotImplementedError
 
@@ -141,3 +138,25 @@ class AnchorFreeHead(BaseHead):
         
         """
         raise NotImplementedError
+
+    def get_points(self, featmap_sizes, dtype, context, flatten=False):
+        """Get points according to feature map sizes.
+
+        Parameters:
+        -----------
+        featmap_sizes: list of tuple 
+            Multi-level feature map sizes.
+        dtype: class of type 
+            The type of points.
+        context: mxnet.context.Context
+            Context of points.
+
+        Returns:
+            tuple: points of each image.
+        """
+        mlvl_points = []
+        for i in range(len(featmap_sizes)):
+            mlvl_points.append(
+                self.get_points_base(featmap_sizes[i], self.strides[i],
+                                        dtype, context, flatten))
+        return mlvl_points

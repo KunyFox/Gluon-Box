@@ -168,7 +168,8 @@ class ImageResizer(object):
 
         img_info['info'].updata({'scale_ratio': scale_ratio})
         img_info['img'] = self._resize_img(img, scale_ratio)
-        img_info['bboxes'] = self._resize_bboxes(bboxes, scale_ratio)
+        if img_info.get('bboxes', None):
+            img_info['bboxes'] = self._resize_bboxes(bboxes, scale_ratio)
         
         return img_info
 
@@ -259,12 +260,11 @@ class ImageFliper(object):
 
         img_info['info'].updata({'flip_direction': direction})
         img = img_info['img']
-        bboxes = img_info['bbox']
-        shape = img.shape[:2]
-        img = self._flip_img(img, direction)
-        bboxes = self._flip_bboxes(bboxes, shape, direction)
-        img_info['img'] = img 
-        img_info['bboxes'] = bboxes
+        img_info['img'] = self._flip_img(img, direction)
+
+        if img_info.get('bboxes', None):
+            bboxes = img_info['bbox']
+            img_info['bboxes'] = self._flip_bboxes(bboxes, img.shape[:2], direction)
 
         return img_info
 
@@ -293,6 +293,34 @@ class ImageFliper(object):
             raise NotImplementedError 
         return flip 
 
+@PROCESSERS.register()
+class BboxTransformer(object):
+    '''Convert bbox format.
+    
+    Parameters:
+    -----------
+    btype: str 
+        xyxy: xywh -> xyxy 
+        xywh: xyxy -> xywh 
+    '''
+    def __init__(self, btype):
+        assert btype in ['xyxy', 'xywh']
+        self.bstyle = btyple 
+
+    def __call__(self, img_info):
+        bboxes = img_info['bboxes']
+        if self.bstyle == 'xywh':
+            x1, y2, x2, y2 = bboxes[:, 0], bboxes[:, 1], bboxes[:, 2], bboxes[:, 3]
+            w = x2 - x1 
+            h = y2 - y1 
+            img_info['bboxes'] = np.stack([x1, y1, w, h])
+        elif self.bstyle == 'xyxy':
+            x1, y2, w, h = bboxes[:, 0], bboxes[:, 1], bboxes[:, 2], bboxes[:, 3]
+            x2 = x1 + w 
+            y2 = y1 + h 
+            img_info['bboxes'] = np.stack([x1, y1, x2, y2])
+        
+        return img_info
 
 @PROCESSERS.register()
 class ToBatch(object):

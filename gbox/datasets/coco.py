@@ -47,6 +47,11 @@ class CocoDataset(BaseDataset):
         return len(self.img_ids)
 
     def _load_annotations(self):
+        """Load annotation from COCO style annotation file.
+
+        'img_ids', 'img_infos' and 'img_anns' will be initialized.
+
+        """
         coco = COCO(self.ann_file)
         self.img_ids = list(coco.imgs.keys())
         self.img_infos = coco.imgs 
@@ -105,8 +110,7 @@ class CocoDataset(BaseDataset):
                 ignored_bboxes = mx.nd.from_numpy(ignored_bboxes)
             )
             img_anns[id] = anns 
-        self.img_anns = img_anns
-            
+        self.img_anns = img_anns   
             
 
     def _filter(self):
@@ -126,6 +130,16 @@ class CocoDataset(BaseDataset):
         self.img_anns = img_anns 
 
     def prepare_train_img(self, idx):
+        '''Prepare training and annotations.
+
+        Return a dict:
+        {
+            bboxes: a numpy array shape of (N, 4).
+            labels: a numpy array shape of (N, ).
+            ignored_bboxes: a numpy array of (K, 4).
+            info: a dict of img information.
+        }
+        '''
         img_id = self.img_ids[idx] 
         info = self.img_infos[img_id]
         img_ann = self.img_anns[img_id]
@@ -134,6 +148,22 @@ class CocoDataset(BaseDataset):
         img_info.update({'bboxes': img_ann['bboxes']})
         img_info.update({'labels': img_ann['labels']})
         img_info.update({'ignored_bboxes': img_ann['ignored_bboxes']})
+        img_info.update({
+            'info' = {
+                file_name=info['file_name'],
+                ori_shape=(info['height'], info['width']),
+                img_root=self.img_root
+            }
+        })
+
+        return self.processer(img_info)
+
+    def prepare_test_img(self, idx):
+
+        img_id = self.img_ids[idx]
+        info = self.img_infos[img_id]
+
+        img_info = {}
         img_info.update({
             'info' = {
                 file_name=info['file_name'],

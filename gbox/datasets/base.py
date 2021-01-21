@@ -1,8 +1,9 @@
 import os 
+import numpy as np
 import mxnet as mx 
 import mxnet.gluon.data.Dataset as Dataset 
 
-from gbox import DATASETS
+from gbox import DATASETS, get_processers
 
 
 @DATASETS.register()
@@ -20,7 +21,7 @@ class BaseDataset(Dataset):
         self.test_mode = test_mode 
         self.filter_empty = filter_empty
         self.min_size = min_size
-        self._processer = get_processer(processer)
+        self._processer = get_processers(processer)
         self._path_check()
 
 
@@ -63,3 +64,9 @@ class BaseDataset(Dataset):
 
     def prepare_train_img(self, idx):
         raise NotImplementedError 
+
+    def xyxy2xywh(self, bboxes):
+        x1, y2, x2, y2 = bboxes[:, 0], bboxes[:, 1], bboxes[:, 2], bboxes[:, 3]
+        w = x2 - x1 
+        h = y2 - y1 
+        return np.stack([x1, y1, w, h])
