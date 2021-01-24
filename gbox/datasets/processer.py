@@ -168,6 +168,7 @@ class ImageResizer(object):
 
         img_info['info'].updata({'scale_ratio': scale_ratio})
         img_info['img'] = self._resize_img(img, scale_ratio)
+        img_info['info'].updata({'img_shape': img_info['img'].shape[:2]})
         if img_info.get('bboxes', None):
             img_info['bboxes'] = self._resize_bboxes(bboxes, scale_ratio)
         
@@ -330,8 +331,16 @@ class ToBatch(object):
     convert to (B x 3 x H x W). And 'img' will be poped
     from img_info dict.
 
+    Returns:
+    --------
+    img: NDArray
+        The img with shape (1, 3, H, W)
+    img_info: dict
+        The information of img.
+
     """
-    def __init__(self, img_info):
+
+    def __call__(self, img_info):
         assert 'img' in img_info
         img = img_info.pop('img')
         assert isinstance(img, mx.nd.NDArray)

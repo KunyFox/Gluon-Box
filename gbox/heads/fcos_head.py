@@ -25,6 +25,7 @@ class FCOSHead(AnchorFreeHead):
     Here norm_on_bbox, centerness_on_reg, dcn_on_last_conv are training
     tricks used in official repo, which will bring remarkable mAP gains
     of up to 4.9. Please see https://github.com/tianzhi0549/FCOS for
+    
     more detail.
 
     Parameters:
@@ -58,7 +59,7 @@ class FCOSHead(AnchorFreeHead):
     norm_cfg: dict
         Dictionary to construct and config norm layer.
 
-    """  # noqa: E501
+    """
 
     def __init__(self,
                  num_classes,
@@ -112,7 +113,7 @@ class FCOSHead(AnchorFreeHead):
 
         Parameters:
         -----------
-        feats: tuple[NDArray] 
+        feats: tuple of NDArray 
             Features from the upstream network, each is a 4D-NDArray.
 
         Returns:
@@ -271,7 +272,7 @@ class FCOSHead(AnchorFreeHead):
         mlvl_points = self.get_points(featmap_sizes, bbox_preds[0].dtype,
                                       bbox_preds[0].context)
         result_list = []
-        for img_id in range(len(img_metas)):
+        for img_id in range(len(img_infos)):
             cls_score_list = [
                 cls_scores[i][img_id].detach() for i in range(num_levels)
             ]
@@ -281,7 +282,7 @@ class FCOSHead(AnchorFreeHead):
             centerness_pred_list = [
                 centernesses[i][img_id].detach() for i in range(num_levels)
             ]
-            img_shape = img_metas[img_id]['img_shape']
+            img_shape = img_infos[img_id]['img_shape']
             scale_factor = img_metas[img_id]['scale_factor']
             det_bboxes = self._get_bboxes_single(
                 cls_score_list, bbox_pred_list, centerness_pred_list,
