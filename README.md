@@ -13,10 +13,8 @@ Gluon-box is implemented by referencing to [MMDetection](https://github.com/open
 | [Backbones](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/backbones)| ResNetV1, ResNetV2 |
 | [Necks](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/necks) | FPN |
 | [Datasets](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/datasets) | COCO |
-| [Processers](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py) | ImageReader, ImageNormalizer, ImageResizer, \
-ImageFliper, BboxTransformer, ToBatch |
-| [Losses](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses) | CrossEntropyLoss(CE), BinaryCrossEntropyLoss(BCE), \
-L1, L2, SmoothL1, FocalLoss |
+| [Processers](https://github.com/KunyFox/Gluon-Box/blob/main/datasets/processer.py) | ImageReader, ImageNormalizer, ImageResizer, ImageFliper, BboxTransformer, ToBatch |
+| [Losses](https://github.com/KunyFox/Gluon-Box/tree/main/gbox/losses) | CrossEntropyLoss(CE), BinaryCrossEntropyLoss(BCE), L1, L2, SmoothL1, FocalLoss |
 
 <br/>  
 
